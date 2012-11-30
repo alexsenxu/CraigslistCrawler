@@ -1,0 +1,11 @@
+# The # sign is used to include comments, lines starting with # will not be read, empty lines will also be ignored by the loader.
+near
+next to
+close to
+adjacent to
+in the neighborhood of
+in the neighbourhood of
+in the area of
+in the vicinity of
+# (blocks/mins) away from
+
