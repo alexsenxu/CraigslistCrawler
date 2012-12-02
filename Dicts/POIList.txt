@@ -12,7 +12,7 @@ Taco Bell
 Dunkin Donuts
 PizzaHut
 AppleBees
-7 Eleven
+7-Eleven
 Costco
 Safeway
 QFC
@@ -21,7 +21,7 @@ Target
 Walmart
 WholeFoods
 Kroger
-WinnDixie
+Winn-Dixie
 Meijer
 Dominos
 Marshalls
