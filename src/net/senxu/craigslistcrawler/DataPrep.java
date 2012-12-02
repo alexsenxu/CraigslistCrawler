@@ -50,8 +50,8 @@ public class DataPrep {
     }
     
     public static ArrayList<String> ConstructQuery(){
-        String prefix="http://search.yahoo.com/search?p=site%3Acraigslist.org+%22";//http://search.yahoo.com/search?p=site%3Acraigslist.org+%22near+mcdonald%27s%22
-        String suffix="%22";
+        String prefix="http://search.yahoo.com/search?p=%2Bsite:craigslist.org+\"";//http://search.yahoo.com/search?p=site%3Acraigslist.org+%22near+mcdonald%27s%22
+        String suffix="\"";
         ArrayList<String> ret=new ArrayList<String>();
         ArrayList<String> nearnessTerms=LoadFile2ArrayList(NearnessTermFile);
         ArrayList<String> POIList=LoadFile2ArrayList(POIListFile);
@@ -59,7 +59,7 @@ public class DataPrep {
             for (String st:nearnessTerms){
                 String temp=st+"+"+s;
                 temp=temp.replace(" ", "+");
-                temp=temp.replace("'", "%27");
+                //temp=temp.replace("'", "%27");
                 ret.add(prefix+temp+suffix);
             }
         }
