@@ -125,6 +125,7 @@ public class CraigsListCrawler {
     }
     
     public static void main(String[] args){
+        CraigslistCrawl();
         RunScheduledCrawling();
         //System.out.println(GetCurrentDate());
         //System.out.println(ExtractPageFromURL("http://search.yahoo.com/search?p=site:craigslist.org+\"adjacent+to+Marshalls\"&b=41"));
@@ -150,7 +151,17 @@ public class CraigsListCrawler {
      * schedule the crawler to run periodically
      */
     private static void RunScheduledCrawling() {
-        CraigslistCrawl();
+        Timer timer = new Timer();
+        System.out.println("started scheduling daily crawling task");
+        long delay =72000000;//20 hours
+        long period =86400000;//24 hours
+        timer.schedule(new TimerTask(){
+            @Override
+        public void run(){
+            System.out.println("Task Running on Date:"+GetCurrentDate());
+            CraigslistCrawl();
+        }
+        },delay);
     }
     /*
     * return true if the url s returns a webpage that doesn't have any search 
