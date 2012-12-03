@@ -8,6 +8,9 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Level;
@@ -58,9 +61,7 @@ public class CraigsListCrawler {
                     //first store the file, then check if the file is an empty list
                     while (!IsStoredListEmpty(destFile)){//if it's not an empty list, keep on crawling
                         
-                       if (!hitlistStored) {
-                            System.out.println("error Storing the returned search result");
-                        }
+                       if (!hitlistStored) System.out.println("error Storing the returned search result");
                        pagecount=pagecount+10;
                        destFile=new File(listDir+fsep+queryphrase+"_P"+pagecount%10+"_D"+date+".html");
                        hitlistStored=StoreHitList(s+pageplus+pagecount, destFile);
@@ -124,7 +125,6 @@ public class CraigsListCrawler {
     }
     
     public static void main(String[] args){
-        CraigslistCrawl();
         RunScheduledCrawling();
         //System.out.println(GetCurrentDate());
         //System.out.println(ExtractPageFromURL("http://search.yahoo.com/search?p=site:craigslist.org+\"adjacent+to+Marshalls\"&b=41"));
@@ -150,16 +150,7 @@ public class CraigsListCrawler {
      * schedule the crawler to run periodically
      */
     private static void RunScheduledCrawling() {
-        Timer timer = new Timer();
-        System.out.println("started scheduling daily crawling task");
-        long delay =72000000;//20 hours
-        long period =86400000;//24 hours
-        timer.schedule(new TimerTask(){
-        public void run(){
-            System.out.println("Task Running on Date:"+GetCurrentDate());
-            CraigslistCrawl();
-        }
-        },delay);
+        CraigslistCrawl();
     }
     /*
     * return true if the url s returns a webpage that doesn't have any search 
