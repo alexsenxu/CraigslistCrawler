@@ -48,23 +48,25 @@ public class CraigsListCrawler {
         String date;
         File destFile;
             //step1. store search result list pages.
+        
         String pageplus="&pstart=1&b=";
         boolean hitlistStored;
                for (String s:queryList){
                //read in the initial query, construct next page until their is no more pages.
-                   int pagecount=1;
-                   
+                   int pageStart=1;
+                   int pageNumber=1;
                     queryphrase=ExtractQueryFromURL(s);
                     date=GetCurrentDate();
-                    destFile=new File(listDir+fsep+queryphrase+"_P"+pagecount%10+"_D"+date+".html");
-                    hitlistStored=StoreHitList(s+pageplus+pagecount, destFile);
+                    destFile=new File(listDir+fsep+queryphrase+"_P"+pageNumber+"_D"+date+".html");
+                    hitlistStored=StoreHitList(s+pageplus+pageStart, destFile);
                     //first store the file, then check if the file is an empty list
                     while (!IsStoredListEmpty(destFile)){//if it's not an empty list, keep on crawling
                         
                        if (!hitlistStored) System.out.println("error Storing the returned search result");
-                       pagecount=pagecount+10;
-                       destFile=new File(listDir+fsep+queryphrase+"_P"+pagecount%10+"_D"+date+".html");
-                       hitlistStored=StoreHitList(s+pageplus+pagecount, destFile);
+                       pageStart=pageStart+10;
+                       pageNumber++;
+                       destFile=new File(listDir+fsep+queryphrase+"_P"+pageNumber+"_D"+date+".html");
+                       hitlistStored=StoreHitList(s+pageplus+pageStart, destFile);
                        
                    }
                     //if it is an empty list, delete the file and move on to the next query.
@@ -124,27 +126,37 @@ public class CraigsListCrawler {
         }
     }
     
-    public static void main(String[] args){
-        CraigslistCrawl();
-        RunScheduledCrawling();
-        //System.out.println(GetCurrentDate());
-        //System.out.println(ExtractPageFromURL("http://search.yahoo.com/search?p=site:craigslist.org+\"adjacent+to+Marshalls\"&b=41"));
-//        Pattern p=Pattern.compile(targetURL);
-//        Matcher m=p.matcher("<li><a href=\"http://belleville.craigslist.ca/rvs/3397989229.html\">belleville</a></li>");
-//        if (m.find()){
-//            System.out.println(m.group(0));
-//        }
-        
-//        File[] resultList = listDir.listFiles(new FilenameFilter() {
-//                        @Override
-//                        public boolean accept(File dir, String name) {
-//                                return name.endsWith(".html");
-//                        }
-//                    });
-//        for (File f:resultList){
-//            MoveToArchieve(f);
-//        }
-        //System.out.println(ExtractQueryFromFile(new File(".\\CrawledData\\ListDir\\adjacent+to+KFC_P_D12_01_2012.html")));
+    public static void main(String[] args) {
+        try {
+            File f=new File("."+fsep+"CrawledData");
+            if (!f.exists()) f.mkdir();
+            if (!listDir.exists()) listDir.mkdir();
+            if (!resultDir.exists()) resultDir.mkdir();
+            if (!urlFile.exists()) urlFile.createNewFile();
+                RunScheduledCrawling();
+
+            
+            //System.out.println(GetCurrentDate());
+            //System.out.println(ExtractPageFromURL("http://search.yahoo.com/search?p=site:craigslist.org+\"adjacent+to+Marshalls\"&b=41"));
+    //        Pattern p=Pattern.compile(targetURL);
+    //        Matcher m=p.matcher("<li><a href=\"http://belleville.craigslist.ca/rvs/3397989229.html\">belleville</a></li>");
+    //        if (m.find()){
+    //            System.out.println(m.group(0));
+    //        }
+            
+    //        File[] resultList = listDir.listFiles(new FilenameFilter() {
+    //                        @Override
+    //                        public boolean accept(File dir, String name) {
+    //                                return name.endsWith(".html");
+    //                        }
+    //                    });
+    //        for (File f:resultList){
+    //            MoveToArchieve(f);
+    //        }
+            //System.out.println(ExtractQueryFromFile(new File(".\\CrawledData\\ListDir\\adjacent+to+KFC_P_D12_01_2012.html")));
+        } catch (IOException ex) {
+            Logger.getLogger(CraigsListCrawler.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     /*
@@ -154,14 +166,16 @@ public class CraigsListCrawler {
          Timer timer = new Timer();
         System.out.println("started scheduling daily crawling task");
         long delay =72000000;//20 hours
-        long period =86400000;//24 hours
+        //long delay=2000;
         timer.schedule(new TimerTask(){
             @Override
         public void run(){
             System.out.println("Task Running on Date:"+GetCurrentDate());
+            System.out.println("job started at:"+Calendar.getInstance().getTime());
             CraigslistCrawl();
+            System.out.println("job finished at:"+Calendar.getInstance().getTime());
         }
-        },delay);
+        },0, delay);
     }
     
 
@@ -292,6 +306,7 @@ public class CraigsListCrawler {
     private static Set<String> loadSet(File urlFile) {
         Set<String> ret=new HashSet<String>();
         try {
+            
             BufferedReader br=new BufferedReader(new FileReader(urlFile));
             String temp;
             while ((temp=br.readLine())!=null){
