@@ -1,0 +1,4 @@
+Jet.batch            = t
+Jet.dataPath         = data
+NameTags.ME.fileName     = kddData/ACEGalenameMEmodel.WC.txt
+WordClusters.fileName    = kddData/aceAllAndKDD.brownCluster
