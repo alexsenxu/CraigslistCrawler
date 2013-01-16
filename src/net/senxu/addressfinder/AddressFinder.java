@@ -4,6 +4,8 @@
  */
 package net.senxu.addressfinder;
 
+import net.senxu.location.AddressComponents;
+
 /**
  *
  * @author sxu
@@ -11,6 +13,12 @@ package net.senxu.addressfinder;
 public class AddressFinder {
     
     AddressFinder(){};
+    
+    public AddressComponents getCityState(String s){
+        AddressComponents ac=new AddressComponents();
+        
+        return ac;
+    }
     
     
     
