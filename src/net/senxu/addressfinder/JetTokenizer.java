@@ -169,16 +169,36 @@ public class JetTokenizer {
         ret.add("WY");
         return ret;
     }
-        public static void main (String args[]) {
-                if (!initialized) {
+    
+    public static Annotation[] getTokens(String txt){
+        if (!initialized) {
+                        JetTest.initializeFromConfig("./props");
+                        initialized = true;
+        }
+        Document doc = new Document(txt);
+        Span span = doc.fullSpan();           
+        Tokenizer.tokenize(doc, span);
+        Annotation[] tokens = Tokenizer.gatherTokens(doc, span);
+        //decorate States;
+        
+        //decorate Addresses using States as anchor point
+        
+        return tokens;        
+    }
+    
+    
+    public static void printJet(String txt){
+        if (!initialized) {
                         JetTest.initializeFromConfig("./props");
                         initialized = true;
                 }
-                String txt = "He went to New York, NY, 10003 and then went to I.B.M.";
+                
                 Document doc = new Document(txt);
                 Span span = doc.fullSpan();           
                 Tokenizer.tokenize(doc, span);
                 Annotation[] tokens = Tokenizer.gatherTokens(doc, span);
+                
+                
                 for (Annotation tokenAnn : tokens) {
                     if (stateSet.contains(doc.text(tokenAnn).toUpperCase())){
                         tokenAnn.put("GeoFeat", "USState");
@@ -203,6 +223,11 @@ public class JetTokenizer {
                                 System.out.println ("Name type is " + type + " from " +
                                         nameSpan.start() + " to " + (nameSpan.end()-1));
                         }
+    }
+    
+        public static void main (String args[]) {
+                String txt = "He went to New York, NY, 10003 and then went to I.B.M.";
+                printJet(txt);
 
         }
 

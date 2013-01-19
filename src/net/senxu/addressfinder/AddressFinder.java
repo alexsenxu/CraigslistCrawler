@@ -4,6 +4,8 @@
  */
 package net.senxu.addressfinder;
 
+import Jet.Tipster.Annotation;
+import java.io.File;
 import net.senxu.location.AddressComponents;
 
 /**
@@ -26,6 +28,13 @@ public class AddressFinder {
     
     
     public static void main(String[] args){
+        File f=new File("testCraig.html");
+        String s=JsoupHTMLCleaner.cleanFile(f);
+        Annotation[] tokens = JetTokenizer.getTokens(s);
+        Jet.Tipster.Document doc = new Jet.Tipster.Document(s);
+        for (Annotation token:tokens){
+            System.out.println(doc.text(token) + "\t" + token.toSGMLString());
+        }
         
     }
     
